@@ -53,5 +53,5 @@ Tested on MacBook Pro 15` (2014). Intel Core i7
 
 Single write: 14.449µs
 Write 1,000,000 records: 2.122833s
-Search through 1,000,000 records by two parameters: 378.062µs
+Search through 1,000,000 records by two parameters: 378.061µs
 ```
