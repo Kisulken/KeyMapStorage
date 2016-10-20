@@ -5,7 +5,7 @@ import (
 )
 
 type Segment struct {
-	Root *Segment
+	//Root *Segment `json:"-"`
 	Size int
 	Path string
 	Records []*Record

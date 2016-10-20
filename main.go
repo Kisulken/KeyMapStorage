@@ -6,7 +6,7 @@ import (
 	"math/rand"
 )
 
-var db *Database
+var db *Storage
 
 type Person struct {
 	FirstName string
@@ -49,10 +49,11 @@ func writeData(records *[]Person) {
 }
 
 func main() {
+
 	rand.Seed(time.Now().UnixNano())
 
 	// Initialization
-	db = &Database{}
+	db = &Storage{}
 	db.Init()
 
 	// Single write example
@@ -66,7 +67,7 @@ func main() {
 	// Generate large amount of data
 	fmt.Println("Generating data...")
 	start = time.Now()
-	data := generateData(1000000)
+	data := generateData(100000)
 	elapsed = time.Since(start)
 
 	fmt.Printf("Generation took %s\n", elapsed)
@@ -109,4 +110,5 @@ func main() {
 	}
 
 	fmt.Printf("Search took %s\n", elapsed)
+
 }

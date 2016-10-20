@@ -6,17 +6,23 @@ import (
 	"strconv"
 )
 
-type Database struct {
+const STORAGE_DUMP_NONE = 0
+const STORAGE_DUMP_INSTANT = 1
+const STORAGE_DUMP_PEREODIC = 2
+
+type Storage struct {
 	Segments map[rune]*Segment
 	IdCounter int64
+	DumpMode byte
 }
 
-func (db *Database) Init() {
+func (db *Storage) Init() {
 	db.IdCounter = 0
 	db.Segments = make(map[rune]*Segment)
+	db.DumpMode = STORAGE_DUMP_NONE
 }
 
-func (db *Database) Size() (size int) {
+func (db *Storage) Size() (size int) {
 	size = 0
 	for _, s := range db.Segments {
 		size += s.Size
@@ -24,7 +30,7 @@ func (db *Database) Size() (size int) {
 	return size
 }
 
-func (db *Database) Write(id string, data interface{}) error {
+func (db *Storage) Write(id string, data interface{}) error {
 	if id == "" {
 		return errors.New("Passed ID is invalid!")
 	}
@@ -42,12 +48,12 @@ func (db *Database) Write(id string, data interface{}) error {
 		segID = rune(id[i])
 		if seg == nil {
 			if seg, ok = db.Segments[segID]; !ok {
-				seg = &Segment{nil, 0, id[:i + 1], make([]*Record, 0), make(map[rune]*Segment)}
+				seg = &Segment{0, id[:i + 1], make([]*Record, 0), make(map[rune]*Segment)}
 				db.Segments[segID] = seg
 			}
 		} else {
 			if sub, ok = seg.Sub[segID]; !ok {
-				sub = &Segment{seg, 0, id[:i + 1], make([]*Record, 0), make(map[rune]*Segment)}
+				sub = &Segment{0, id[:i + 1], make([]*Record, 0), make(map[rune]*Segment)}
 				seg.Sub[segID] = sub
 				seg = sub
 			} else {
@@ -65,15 +71,15 @@ func (db *Database) Write(id string, data interface{}) error {
 	seg.Records = append(seg.Records, &Record{db.IdCounter, id, data})
 	// recursive incremental
 	seg.Size++
-	for seg.Root != nil {
-		seg.Root.Size++
-		seg = seg.Root
-	}
+	//for seg.Root != nil {
+	//	seg.Root.Size++
+	//	seg = seg.Root
+	//}
 
 	return nil
 }
 
-func (db *Database) FindSegment(id string) (*Segment, error) {
+func (db *Storage) FindSegment(id string) (*Segment, error) {
 	if id == "" {
 		return nil, errors.New("Passed ID is invalid!")
 	}
