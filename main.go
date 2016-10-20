@@ -49,7 +49,6 @@ func writeData(records *[]Person) {
 }
 
 func main() {
-
 	rand.Seed(time.Now().UnixNano())
 
 	// Initialization
@@ -67,7 +66,7 @@ func main() {
 	// Generate large amount of data
 	fmt.Println("Generating data...")
 	start = time.Now()
-	data := generateData(100000)
+	data := generateData(1000000)
 	elapsed = time.Since(start)
 
 	fmt.Printf("Generation took %s\n", elapsed)
