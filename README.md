@@ -1,7 +1,7 @@
 # KeyMapStorage
-Algorithm which provides quick search through the big amount of data stored in RAM based on primary keys
+Algorithm that performs a quick search through data stored in RAM based on primary keys
 
-Example of use
+## Example
 
 Initialization
 ```go
@@ -47,7 +47,7 @@ if len(records) > 0 {
 }
 ```
 
-Benchmarks
+## Benchmarks
 ```
 Tested on MacBook Pro 15` (2014). Intel Core i7
 
